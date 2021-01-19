@@ -147,23 +147,13 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
-        onPressed: () => showSearch(
-            context: context,
-            delegate: CustomSearchHintDelegate(hintText: "hint text hai")),
+        onPressed: () => showSearch(context: context, delegate: SearchBar()),
       ),
     );
   }
 }
 
-class CustomSearchHintDelegate extends SearchDelegate {
-  CustomSearchHintDelegate({
-    String hintText,
-  }) : super(
-          searchFieldLabel: hintText,
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.search,
-        );
-
+class SearchBar extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
