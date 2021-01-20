@@ -26,7 +26,8 @@ class _HomeState extends State<Home> {
   var humidity;
   var windspeed;
   var logo;
-  var city = "Boston";
+  var city = "Mumbai";
+  var name;
 
   Future getweather() async {
     http.Response response = await http.get(
@@ -38,8 +39,8 @@ class _HomeState extends State<Home> {
       this.currently = result['weather'][0]['main'];
       this.humidity = result['main']['humidity'];
       this.windspeed = result['wind']['speed'];
-      this.logo =
-          "https://cdn4.vectorstock.com/i/1000x1000/34/23/thermometer-sun-heat-temperature-icon-vector-22773423.jpg";
+
+      this.name = result['name'];
     });
   }
 
@@ -52,7 +53,21 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
+      appBar: new AppBar(
+        backgroundColor: Colors.transparent,
+        title: TextField(
+          decoration: new InputDecoration(
+              icon: Icon(Icons.search), hintText: "Serach any city"),
+          onSubmitted: (String str) {
+            setState(() {
+              city = str;
+              print(city);
+            });
+          },
+        ),
+      ),
       body: Stack(
         children: [
           Container(
@@ -61,129 +76,92 @@ class _HomeState extends State<Home> {
                 image: DecorationImage(
                     image: AssetImage("assets/background.png"),
                     fit: BoxFit.cover)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 10.0),
-                        child: Text(" $city",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w600)),
-                      ),
-                      Text(
-                        temp != null ? temp.toString() + "\u00B0" : "Loading",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40.0,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                        child: Text(
-                            currently != null
-                                ? currently.toString()
-                                : "Loading",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w600)),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        RowContainer(
-                          attribute: "Temp",
-                          temp: temp.toString(),
-                          logo: Icons.thermostat_sharp,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: Text(name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w600)),
                         ),
-                        RowContainer(
-                          attribute: "Humidity",
-                          temp: humidity.toString(),
-                          logo: Icons.cloud,
+                        Text(
+                          temp != null ? temp.toString() + "\u00B0" : "Loading",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40.0,
+                              fontWeight: FontWeight.w600),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        RowContainer(
-                          attribute: "Weather",
-                          temp: currently.toString(),
-                          logo: Icons.waves,
-                        ),
-                        RowContainer(
-                          attribute: "Windspeed",
-                          temp: windspeed.toString(),
-                          logo: Icons.speed,
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text(
+                              currently != null
+                                  ? currently.toString()
+                                  : "Loading",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RowContainer(
+                            attribute: "Temp",
+                            temp: temp.toString(),
+                            logo: Icons.thermostat_sharp,
+                          ),
+                          RowContainer(
+                            attribute: "Humidity",
+                            temp: humidity.toString(),
+                            logo: Icons.cloud,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RowContainer(
+                            attribute: "Weather",
+                            temp: currently.toString(),
+                            logo: Icons.waves,
+                          ),
+                          RowContainer(
+                            attribute: "Windspeed",
+                            temp: windspeed.toString(),
+                            logo: Icons.speed,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
-        onPressed: () => showSearch(context: context, delegate: SearchBar()),
-      ),
     );
-  }
-}
-
-class SearchBar extends SearchDelegate {
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () => Navigator.of(context).pop(),
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Center(
-      child: Container(
-        color: Colors.red,
-        child: Text("suggestudasofj na"),
-      ),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) => Text('results');
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {
-          print(query);
-        },
-      )
-    ];
   }
 }
