@@ -120,12 +120,12 @@ class Main {
     this.humidity,
   });
 
-  double temp;
-  double feelsLike;
-  double tempMin;
-  int tempMax;
-  int pressure;
-  int humidity;
+  var temp;
+  var feelsLike;
+  var tempMin;
+  var tempMax;
+  var pressure;
+  var humidity;
 
   factory Main.fromJson(Map<String, dynamic> json) => Main(
         temp: json["temp"].toDouble(),
