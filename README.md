@@ -1,7 +1,7 @@
 # weatherapp
 
 A new Flutter project.
-
+![screenshots](https://github.com/Omk4r-san/WeatherApp/blob/main/screenshots/ss1.png)
 ## Getting Started
 
 This project is a starting point for a Flutter application.
